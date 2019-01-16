@@ -4,8 +4,10 @@ import NavigationalItem from './NavigationalItem/NavigationalItem';
 const navigation=(props)=>{
 return (
 		<ul className={classes.NavigationalItems}>
-			<NavigationalItem link="/" exact>Burger Builder</NavigationalItem>
-			<NavigationalItem link="/orders">My Orders</NavigationalItem>
+			<NavigationalItem link="/" exact slideClick={props.slideClick}>Burger Builder</NavigationalItem>
+			<NavigationalItem link="/orders" slideClick={props.slideClick}>My Orders</NavigationalItem>
+			{props.isauth?<NavigationalItem link="/logOut" slideClick={props.slideClick}>LogOut</NavigationalItem>:
+			<NavigationalItem link="/auth" slideClick={props.slideClick}>Auth</NavigationalItem>}
 		</ul>
 	);
 }

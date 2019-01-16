@@ -8,13 +8,12 @@ import axios from '../../axios-orders';
 import Spinner from '../../components/UI/spinner/spinner.js';
 import {connect} from 'react-redux';
 import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler.js';
-import * as actionTypes from '../../store/action';
+import * as actions from '../../store/actions/index.js';
 
 class BurgerBuilder extends Component {
 	state={
 		purchased:false,
-		loading:false,
-		error:false
+		loading:false
 	}
 
 	setPurchasble=(newIngredients)=>{
@@ -23,7 +22,7 @@ class BurgerBuilder extends Component {
 		}).reduce((acc,curr)=>{ 
 			return acc+curr},0);
 		
-			return sum>0;
+		return sum>0;
 		
 	}
 	setPurchased=()=>{
@@ -50,7 +49,7 @@ class BurgerBuilder extends Component {
 		// 	pathname:'/checkout',
 		// 	search:'?'+queryString
 		// });
-
+		this.props.onBurgerPurchaseInit();
 		this.props.history.push('/checkout');
 	}
 
@@ -78,10 +77,10 @@ class BurgerBuilder extends Component {
 	// 	});
 	// 	this.setPurchasble(newIngredients);
 	// }
-	componentDidMount(){
-		// axios.get('https://my-react-burger-b178d.firebaseio.com/ingredients.json')
-		// .then(response=>{this.setState({ingredients:response.data})})
-		// .catch(error=>{this.setState({error:true})});
+	componentWillMount(){
+		
+			this.props.onInitIngredients();
+		
 	}
 
 	render(){
@@ -116,7 +115,7 @@ class BurgerBuilder extends Component {
 			}
 
 		}
-		
+
 		return(
 			<Aux>
 			<Model 
@@ -124,7 +123,7 @@ class BurgerBuilder extends Component {
 			clickBackdrop={this.setPurchasedCanceled}>
 			{orderSummary}
 			</Model>
-			{this.state.error? 'Problem in fetching ingredients':burger}
+			{this.props.error? 'Problem in fetching ingredients':burger}
 			</Aux>
 			);
 	}
@@ -132,15 +131,18 @@ class BurgerBuilder extends Component {
 
 const mapStatetoProps=state=>{
 	return{
-		ing:state.ingredients,
-		price:state.price
+		ing:state.burgerBuilder.ingredients,
+		price:state.burgerBuilder.price,
+		error:state.burgerBuilder.error
 	};
 }
 
 const mapDispatchtoProps=dispatch=>{
 	return{
-		onIngredientAdded:(ingName)=>dispatch({type:actionTypes.ADD_INGREDIENT,ingName:ingName}),
-		onIngredientRemoved:(ingName)=>dispatch({type:actionTypes.REMOVE_INGREDIENT,ingName:ingName})
+		onIngredientAdded:(ingName)=>dispatch(actions.addIngredeint(ingName)),
+		onIngredientRemoved:(ingName)=>dispatch(actions.removeIngredeint(ingName)),
+		onInitIngredients:()=>dispatch(actions.initIngredeint()),
+		onBurgerPurchaseInit:()=>dispatch(actions.burgerPurchaseInit())
 	};
 }
 

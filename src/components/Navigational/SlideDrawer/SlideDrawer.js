@@ -15,10 +15,12 @@ return (
 		<div className={AddClasses.join(' ')}>
 		<div className={classes.Logo}><Logo/></div>
 			<nav>
-			<Navigation/>
+			<Navigation isauth={props.isauth} slideClick={props.slideClick}/>
 			</nav>
 		</div>
 		</Aux>
 	);
 }
+
+
 export default slideDrawer;

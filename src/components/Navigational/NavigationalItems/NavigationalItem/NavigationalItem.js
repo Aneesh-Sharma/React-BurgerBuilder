@@ -7,7 +7,8 @@ return (
 		<NavLink 
 		exact={props.exact}
 		activeClassName={classes.active}
-		 to={props.link}>
+		 to={props.link}
+		 onClick={props.slideClick}>
 		{props.children}
 		</NavLink></li>
 	);

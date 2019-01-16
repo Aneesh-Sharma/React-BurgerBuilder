@@ -8,7 +8,7 @@ return (
 		<header className={classes.Toolbar}>
 			<DrawerToggle click={props.toggleClicked}/>
 			<div className={classes.Logo}><Logo/></div>
-			<nav className={classes.DisplayOnly}><Navigation/></nav>
+			<nav className={classes.DisplayOnly}><Navigation isauth={props.isauth}/></nav>
 			
 		</header>
 	);

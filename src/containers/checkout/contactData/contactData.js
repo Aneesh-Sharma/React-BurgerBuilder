@@ -5,6 +5,8 @@ import Spinner from '../../../components/UI/spinner/spinner.js';
 import axios from '../../../axios-orders';
 import Input from '../../../components/UI/Input/Input.js';
 import {connect} from 'react-redux';
+import WithErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler.js';
+import * as orderCreater from '../../../store/actions/index.js';
 
 class ContactData extends Component{
 	state={
@@ -90,12 +92,11 @@ class ContactData extends Component{
 				valid:true
 			}
 		},
-		formValid:false,
-		loading:false
+		formValid:false
 	}
 	orderhandler=(event)=>{
 		event.preventDefault();
-		this.setState({loading:true});
+
 		let customerInfo={};
 		for(let indenifier in this.state.orderForm){
 			customerInfo[indenifier]=this.state.orderForm[indenifier].value;
@@ -105,16 +106,8 @@ class ContactData extends Component{
 			price:this.props.price,
 			customer:customerInfo
 		}
-		axios.post('/orders.json',order)
-		.then(response=>{
-			this.setState({loading:false});
-			console.log(response);
-			this.props.history.push('/');
-		})
-		.catch(error=>{
-			console.log(error);
-			this.setState({loading:false});
-		});
+		
+		this.props.onOrderBurger(order,this.props.token);
 	}
 
 	checkValid=(value,rules)=>{
@@ -171,7 +164,7 @@ class ContactData extends Component{
 			<Button  type='Success' disabled={!this.state.formValid}>Order</Button>
 			</form>	
 			);
-		if(this.state.loading){
+		if(this.props.loading){
 			contactData=<Spinner/>;
 		}
 		return(<div className={classes.ContactData}>
@@ -184,8 +177,16 @@ class ContactData extends Component{
 
 const mapStatetoProps=state=>{
 	return{
-		ing:state.ingredients,
-		price:state.price
+		ing:state.burgerBuilder.ingredients,
+		price:state.burgerBuilder.price,
+		loading:state.order.loading,
+		token:state.auth.token
 	};
 }
-export default connect(mapStatetoProps)(ContactData);
+const mapDispatchtoProps=dispatch=>{
+	return{
+		onOrderBurger:(orderData,token)=>dispatch(orderCreater.burgerPurchase(orderData,token))
+	};
+}
+
+export default connect(mapStatetoProps,mapDispatchtoProps)(WithErrorHandler(ContactData,axios));
