@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler.js';
 import * as actions from '../../store/actions/index.js';
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
 	state={
 		purchased:false,
 		loading:false
@@ -44,7 +44,7 @@ class BurgerBuilder extends Component {
 		this.props.onBurgerPurchaseInit();
 		this.props.history.push('/checkout');
 	}
-	componentWillMount(){
+	componentDidMount(){
 		
 		this.props.onInitIngredients();
 		
