@@ -33,6 +33,7 @@ const burgerPurchasedFailed=(state,action)=>{
 
 const fetchOrderStart=(state,action)=>{
 	return updateObject(state,{
+		    orders:[],
 			loading:true
 		});
 };

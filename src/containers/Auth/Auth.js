@@ -5,6 +5,7 @@ import Input from '../../components/UI/Input/Input.js';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index.js';
 import Spinner from '../../components/UI/spinner/spinner.js';
+import {Redirect} from 'react-router';
 
 class Auth extends Component {
 	state={
@@ -48,6 +49,11 @@ class Auth extends Component {
 			isValid=value.length>=rules.minLength&&isValid;
 		}
 		return isValid;
+	}
+	componentDidMount(){
+		if(!this.props.building&&this.props.authRedirect!=='/'){
+			this.props.setAuthRedirect('/');
+		}
 	}
 
 	orderhandler=(event)=>{
@@ -101,7 +107,12 @@ class Auth extends Component {
 		if(this.props.loading){
 			contactData=<Spinner/>
 		}
+		let authRedirect=null;
+		if(this.props.isauth){
+			authRedirect=<Redirect to={this.props.authRedirect}/>
+		}
 		return(<div className={classes.AuthData}>
+		    {authRedirect}
 			{errorMessage}
 			{contactData}
 			<Button type='Danger' click={this.switchAuthMode}>Switch to {this.state.isSignUp?'Sign In':'Sign Up'}</Button>
@@ -112,13 +123,17 @@ class Auth extends Component {
 const mapStatetoProps=state=>{
 	return{
 		loading:state.auth.loading,
-		error:state.auth.error
+		error:state.auth.error,
+		isauth:state.auth.token!=null,
+		authRedirect:state.auth.authRedirect,
+		building:state.burgerBuilder.building
 	};
-}
+};
 
 const mapDispatchtoProps=dispatch=>{
 	return{
-		onAuth:(email,pass,isSignUp)=>dispatch(actions.auth(email,pass,isSignUp))
+		onAuth:(email,pass,isSignUp)=>dispatch(actions.auth(email,pass,isSignUp)),
+		setAuthRedirect:(path)=>dispatch(actions.setAuthRedirect(path))
 	};
 }
 

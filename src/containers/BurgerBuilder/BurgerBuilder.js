@@ -26,9 +26,13 @@ class BurgerBuilder extends Component {
 		
 	}
 	setPurchased=()=>{
-		this.setState({
-			purchased:true
-		});
+		if(this.props.isauth){
+			this.setState({purchased:true});
+		}else{
+			this.props.setAuthRedirect('/checkout');
+			this.props.history.push('/auth');
+		}
+		
 	}
 
 	setPurchasedCanceled=()=>{
@@ -37,49 +41,12 @@ class BurgerBuilder extends Component {
 		});
 	}
 	purchasedContinueHandler=()=>{
-		
-		// const queryParams=[];
-		// for(let i in this.props.ing){
-		// 	queryParams.push(encodeURIComponent(i)+"="+encodeURIComponent(this.state.ingredients[i]));
-		// }
-		// queryParams.push(encodeURIComponent('price')+"="+encodeURIComponent(this.state.price));
-		// const queryString=queryParams.join('&');
-
-		// this.props.history.push({
-		// 	pathname:'/checkout',
-		// 	search:'?'+queryString
-		// });
 		this.props.onBurgerPurchaseInit();
 		this.props.history.push('/checkout');
 	}
-
-	// addIngredientHandler=(type)=>{
-	// 	const newIngredients={...this.state.ingredients};
-	// 	const oldCount=this.state.ingredients[type];
-	// 	const newCount=oldCount+1;
-	// 	const newPrice=this.state.price+PRICE_INGREDIENT[type];
-	// 	newIngredients[type]=newCount;
-	// 	this.setState({
-	// 		ingredients:newIngredients,
-	// 		price:newPrice
-	// 	});
-	// 	this.setPurchasble(newIngredients);
-	// }
-	// removeIngredientHandler=(type)=>{
-	// 	const newIngredients={...this.state.ingredients};
-	// 	const oldCount=this.state.ingredients[type];
-	// 	const newCount=oldCount-1;
-	// 	const newPrice=this.state.price-PRICE_INGREDIENT[type];
-	// 	newIngredients[type]=newCount;
-	// 	this.setState({
-	// 		ingredients:newIngredients,
-	// 		price:newPrice
-	// 	});
-	// 	this.setPurchasble(newIngredients);
-	// }
 	componentWillMount(){
 		
-			this.props.onInitIngredients();
+		this.props.onInitIngredients();
 		
 	}
 
@@ -100,7 +67,8 @@ class BurgerBuilder extends Component {
 				price={this.props.price}
 				addIng={this.props.onIngredientAdded} 
 				orderClick={this.setPurchased}
-				subIng={this.props.onIngredientRemoved}/>
+				subIng={this.props.onIngredientRemoved}
+				isauth={this.props.isauth}/>
 				</Aux>
 				);
 
@@ -133,7 +101,8 @@ const mapStatetoProps=state=>{
 	return{
 		ing:state.burgerBuilder.ingredients,
 		price:state.burgerBuilder.price,
-		error:state.burgerBuilder.error
+		error:state.burgerBuilder.error,
+		isauth:state.auth.token!=null
 	};
 }
 
@@ -142,7 +111,8 @@ const mapDispatchtoProps=dispatch=>{
 		onIngredientAdded:(ingName)=>dispatch(actions.addIngredeint(ingName)),
 		onIngredientRemoved:(ingName)=>dispatch(actions.removeIngredeint(ingName)),
 		onInitIngredients:()=>dispatch(actions.initIngredeint()),
-		onBurgerPurchaseInit:()=>dispatch(actions.burgerPurchaseInit())
+		onBurgerPurchaseInit:()=>dispatch(actions.burgerPurchaseInit()),
+		setAuthRedirect:(path)=>dispatch(actions.setAuthRedirect(path))
 	};
 }
 

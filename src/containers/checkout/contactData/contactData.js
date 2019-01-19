@@ -104,7 +104,8 @@ class ContactData extends Component{
 		const order={
 			ingredients:this.props.ing,
 			price:this.props.price,
-			customer:customerInfo
+			customer:customerInfo,
+			userId:this.props.userId
 		}
 		
 		this.props.onOrderBurger(order,this.props.token);
@@ -136,7 +137,7 @@ class ContactData extends Component{
 		for(let identifier in newOrderForm){
        		formValid=newOrderForm[identifier].valid&&formValid;
 		}
-		console.log(newOrderFormInput);
+		//console.log(newOrderFormInput);
 		this.setState({orderForm:newOrderForm,formValid:formValid});
 	}
 
@@ -180,7 +181,8 @@ const mapStatetoProps=state=>{
 		ing:state.burgerBuilder.ingredients,
 		price:state.burgerBuilder.price,
 		loading:state.order.loading,
-		token:state.auth.token
+		token:state.auth.token,
+		userId:state.auth.userId
 	};
 }
 const mapDispatchtoProps=dispatch=>{

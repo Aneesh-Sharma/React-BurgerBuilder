@@ -32,11 +32,11 @@ export const burgerPurchase=(orderData,token)=>{
 		dispatch(burgerPurchaseStart());
 		axios.post('/orders.json?auth='+token,orderData)
 		.then(response=>{
-			console.log(response);
+		//	console.log(response);
 			dispatch(burgerPurchaseSuccess(response.data,orderData));
 		})
 		.catch(error=>{
-			console.log(error);
+		//	console.log(error);
 			dispatch(burgerPurchaseFailed(error));
 		});
 	};
@@ -62,12 +62,12 @@ export const fetchOrderFailed=(error)=>{
 	};
 };
 
-export const fetchOrder=(token)=>{
+export const fetchOrder=(token,userId)=>{
 	return dispatch=>{
 		dispatch(fetchOrderStart());
-		axios.get('/orders.json?auth='+token)
+		axios.get('/orders.json?auth='+token+'&orderBy="userId"&equalTo="'+userId+'"')
 		.then(res=>{
-			console.log(res.data);
+		//	console.log(res.data);
 			const fetchData=[];
 			for(let key in res.data){
 				fetchData.push({

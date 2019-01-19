@@ -10,8 +10,9 @@ const order=(props)=>{
 			amount:props.ingredients[ingName]
 		});
 	}
-const ingOutput=ingredients.map(ig=>{
+const ingOutput=ingredients.map((ig,index)=>{
 	return(<span 
+		key={index}
 		style={{textTransform:'capitalize',
 				display:'inline-block',
 				margin:'0 8px',

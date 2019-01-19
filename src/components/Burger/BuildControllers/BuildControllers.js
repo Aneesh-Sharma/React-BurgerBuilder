@@ -19,7 +19,12 @@ const buildControllers=(props)=>{
 					addclick={()=>props.addIng(ctrl.type)}
 					subclick={()=>props.subIng(ctrl.type)}/>);
 			})}
-			<button className={classes.OrderButton} disabled={!props.purchasable} onClick={props.orderClick}>Order Now</button>
+			<button 
+			className={classes.OrderButton} 
+			disabled={!props.purchasable} 
+			onClick={props.orderClick}>
+			{props.isauth?'Order Now':'Login to Order'}
+			</button>
 		</div>
 		);
 

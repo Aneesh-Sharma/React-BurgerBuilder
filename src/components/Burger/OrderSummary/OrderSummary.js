@@ -3,7 +3,7 @@ import Aux from '../../../hoc/Auxilary'
 import Button from '../../UI/Button/Button'
 class OrderSummary extends Component{
 	componentWillUpdate(){
-		console.log("OrderSummary Update");
+	//	console.log("OrderSummary Update");
 	}
 
 	render(){
